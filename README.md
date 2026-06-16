@@ -1,4 +1,4 @@
-# ✂️ Sistema de Gestão de Barbearia - Java POO
+# Sistema de Gestão de Barbearia - Java POO
 
 ![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=java)
 ![NetBeans](https://img.shields.io/badge/NetBeans-IDE-green?style=for-the-badge&logo=apache-netbeans-ide)
@@ -8,36 +8,36 @@
 
 ---
 
-## 📋 Funcionalidades
+## Funcionalidades
 
-- 💇 Registro de corte de cabelo
-- 🧔 Registro de corte de barba
-- 💰 Cálculo automático do preço de cada serviço
-- 📋 Listagem de todos os atendimentos
-- 📊 Faturamento total da barbearia
+-  Registro de corte de cabelo
+-  Registro de corte de barba
+-  Cálculo automático do preço de cada serviço
+-  Listagem de todos os atendimentos
+-  Faturamento total da barbearia
 
 ---
 
 ## 🛠️ Tecnologias
 
-- ☕ Java 21
-- 💻 NetBeans 25
-- 🐙 Git + GitHub
+-  Java 21
+-  NetBeans 25
+-  Git + GitHub
 
 ---
 
-## 🎯 Conceitos de POO aplicados
+##  Conceitos de POO aplicados
 
 | Pilar | Aplicação |
 |---|---|
-| 🔷 Abstração | Classe abstrata `Servico` |
-| 🔒 Encapsulamento | Atributos privados com getters/setters |
-| 🧬 Herança | `CorteCabelo` e `CorteBarba` herdam de `Servico` |
-| 🎭 Polimorfismo | Cada subclasse implementa `calcularPreco()` |
+|  Abstração | Classe abstrata `Servico` |
+|  Encapsulamento | Atributos privados com getters/setters |
+|  Herança | `CorteCabelo` e `CorteBarba` herdam de `Servico` |
+|  Polimorfismo | Cada subclasse implementa `calcularPreco()` |
 
 ---
 
-## 🌿 Branches do projeto
+##  Branches do projeto
 ```
 feature-modelagem  ─┐
 feature-servicos   ─┼─► merge → master
@@ -46,7 +46,7 @@ feature-menu       ─┘
 
 ---
 
-## ▶️ Como executar
+##  Como executar
 
 1. Clone o repositório
 2. Abra no **NetBeans**
