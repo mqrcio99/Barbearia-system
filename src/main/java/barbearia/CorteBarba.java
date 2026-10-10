@@ -1,33 +1,31 @@
 package barbearia;
 
 /**
- * Classe concreta que representa um serviço de Corte de Barba.
- * Herda de Servico e adiciona o atributo valorBarba - Herança.
+ * Classe concreta que representa um serviço de Corte de Barba. Herda de Servico
+ * e adiciona o valor adicional do serviço.
  */
 public class CorteBarba extends Servico {
 
-    // Atributo específico de CorteBarba - Encapsulamento
-    private double valorBarba;
+    private double valorAdicional;
 
-    // Construtor
-    public CorteBarba(String cliente, double valorBarba) {
+    public CorteBarba(String cliente, double valorAdicional) {
         super(cliente, "Corte de Barba", 20.0);
-        this.valorBarba = valorBarba;
+        this.valorAdicional = validarValorMonetario(valorAdicional, "valor adicional");
     }
 
-    public double getValorBarba() {
-        return valorBarba;
+    public double getValorAdicional() {
+        return valorAdicional;
     }
 
-    public void setValorBarba(double valorBarba) {
-        this.valorBarba = valorBarba;
+    public void setValorAdicional(double valorAdicional) {
+        this.valorAdicional = validarValorMonetario(valorAdicional, "valor adicional");
     }
 
     /**
-     * Para corte de barba, o preço é preço base + valorBarba adicional.
+     * Para corte de barba, o preço é o preço base mais o valor adicional.
      */
     @Override
     public double calcularPreco() {
-        return getPrecoBase() + valorBarba;
+        return validarValorMonetario(getPrecoBase() + valorAdicional, "preço total");
     }
 }

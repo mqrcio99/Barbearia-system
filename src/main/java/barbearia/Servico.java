@@ -1,30 +1,27 @@
 package barbearia;
 
 /**
- * Classe abstrata que representa um serviço da barbearia.
- * Aplica os pilares de POO: Abstração, Encapsulamento e Herança.
+ * Classe abstrata que representa um serviço da barbearia. Aplica os pilares de
+ * POO: Abstração, Encapsulamento e Herança.
  */
 public abstract class Servico {
 
-    // Encapsulamento: atributos privados
     private String cliente;
     private String descricao;
     private double precoBase;
 
-    // Construtor
     public Servico(String cliente, String descricao, double precoBase) {
-        this.cliente = cliente;
-        this.descricao = descricao;
-        this.precoBase = precoBase;
+        this.cliente = validarTextoObrigatorio(cliente, "nome do cliente");
+        this.descricao = validarTextoObrigatorio(descricao, "descrição do serviço");
+        this.precoBase = validarValorMonetario(precoBase, "preço base");
     }
 
-    // Getters e Setters
     public String getCliente() {
         return cliente;
     }
 
     public void setCliente(String cliente) {
-        this.cliente = cliente;
+        this.cliente = validarTextoObrigatorio(cliente, "nome do cliente");
     }
 
     public String getDescricao() {
@@ -32,7 +29,7 @@ public abstract class Servico {
     }
 
     public void setDescricao(String descricao) {
-        this.descricao = descricao;
+        this.descricao = validarTextoObrigatorio(descricao, "descrição do serviço");
     }
 
     public double getPrecoBase() {
@@ -40,15 +37,27 @@ public abstract class Servico {
     }
 
     public void setPrecoBase(double precoBase) {
-        this.precoBase = precoBase;
+        this.precoBase = validarValorMonetario(precoBase, "preço base");
     }
 
-    // Método abstrato - Polimorfismo
     public abstract double calcularPreco();
+
+    protected static String validarTextoObrigatorio(String valor, String nomeCampo) {
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException(nomeCampo + " não pode ser vazio.");
+        }
+        return valor;
+    }
+
+    protected static double validarValorMonetario(double valor, String nomeCampo) {
+        if (!Double.isFinite(valor) || valor < 0) {
+            throw new IllegalArgumentException(nomeCampo + " deve ser finito e não negativo.");
+        }
+        return valor;
+    }
 
     @Override
     public String toString() {
-        return String.format("Cliente: %-15s | Serviço: %-15s | Preço: R$ %.2f",
-                cliente, descricao, calcularPreco());
+        return String.format("Cliente: %-15s | Serviço: %-15s | Preço: R$ %.2f", cliente, descricao, calcularPreco());
     }
 }

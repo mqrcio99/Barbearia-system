@@ -1,59 +1,50 @@
-# Sistema de Gestão de Barbearia - Java POO
+# Sistema de Gestão de Barbearia
 
-![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=java)
-![NetBeans](https://img.shields.io/badge/NetBeans-IDE-green?style=for-the-badge&logo=apache-netbeans-ide)
-![Git](https://img.shields.io/badge/Git-GitHub-black?style=for-the-badge&logo=github)
+Aplicação de terminal em Java para registrar cortes de cabelo e barba, listar serviços e consultar o faturamento acumulado durante a execução.
 
-> Sistema desenvolvido em Java aplicando os pilares da Programação Orientada a Objetos e versionamento profissional com Git/GitHub.
+## Requisitos
 
----
+- JDK 21
+- Maven
 
-## Funcionalidades
+## Testes e validações
 
--  Registro de corte de cabelo
--  Registro de corte de barba
--  Cálculo automático do preço de cada serviço
--  Listagem de todos os atendimentos
--  Faturamento total da barbearia
-
----
-
-## 🛠️ Tecnologias
-
--  Java 21
--  NetBeans 25
--  Git + GitHub
-
----
-
-##  Conceitos de POO aplicados
-
-| Pilar | Aplicação |
-|---|---|
-|  Abstração | Classe abstrata `Servico` |
-|  Encapsulamento | Atributos privados com getters/setters |
-|  Herança | `CorteCabelo` e `CorteBarba` herdam de `Servico` |
-|  Polimorfismo | Cada subclasse implementa `calcularPreco()` |
-
----
-
-##  Branches do projeto
-```
-feature-modelagem  ─┐
-feature-servicos   ─┼─► merge → master
-feature-menu       ─┘
+```sh
+mvn test
+mvn verify
 ```
 
----
+`mvn verify` também verifica a formatação Java com Eclipse JDT. Para formatar os fontes:
 
-##  Como executar
+```sh
+mvn spotless:apply
+```
 
-1. Clone o repositório
-2. Abra no **NetBeans**
-3. Execute a classe `BarbeariaSystem.java`
+## Executar
 
----
+```sh
+mvn package
+java -cp target/classes barbearia.BarbeariaSystem
+```
 
-## 👨‍💻 Autor Mqrcio 0liveira
+## Estrutura
 
-Desenvolvido como projeto acadêmico para praticar POO e Git com NetBeans.
+```text
+src/
+	main/java/barbearia/
+		BarbeariaSystem.java       # Interface de terminal
+		GerenciadorBarbearia.java  # Registro e faturamento
+		Servico.java               # Contrato e validações compartilhadas
+		CorteCabelo.java           # Serviço de corte de cabelo
+		CorteBarba.java            # Serviço de corte de barba
+	test/java/barbearia/
+		GerenciadorBarbeariaTest.java
+		ServicoTest.java
+```
+
+## Decisões técnicas
+
+- A interface de terminal é separada das regras de domínio; os registros ficam em memória e são descartados ao encerrar o programa.
+- `Servico` concentra validações compartilhadas; valores monetários precisam ser finitos e não negativos.
+- Os preços são calculados com `double` para manter o escopo simples do exercício. Para uso financeiro real, deve-se migrar para `BigDecimal` e definir regras de arredondamento.
+- JUnit Jupiter cobre os cálculos, rejeição de entradas inválidas e acesso somente para leitura à lista de serviços.
