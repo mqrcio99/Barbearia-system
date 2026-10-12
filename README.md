@@ -1,50 +1,130 @@
-# Sistema de Gestão de Barbearia
+# Barber Shop Management System
 
-Aplicação de terminal em Java para registrar cortes de cabelo e barba, listar serviços e consultar o faturamento acumulado durante a execução.
+![Java](https://img.shields.io/badge/Java-21-blue) ![Maven](https://img.shields.io/badge/Maven-3.x-red)
 
-## Requisitos
+A simple CLI application for managing barbershop services, tracking clients, and calculating total revenue with a clean Java domain model.
 
-- JDK 21
+## About
+
+This project was designed as a small business management application for a barber shop. It allows users to register haircuts and beard trims, list all services, and calculate the total revenue generated during the current session. The application stores the service list in a local JSON file so it can be restored between executions.
+
+## Features
+
+- Register haircuts and beard services
+- Calculate revenue using `BigDecimal`
+- Persist service data in `dados.json`
+- Validate invalid client names and invalid monetary values
+- Protect the internal service list from external mutation
+- Use a simple console menu for user interaction
+
+## Tech Stack
+
+- Java 21
 - Maven
+- JUnit 5
+- Jackson Databind
+- Console-based CLI
 
-## Testes e validações
+## How to Run
 
-```sh
-mvn test
-mvn verify
-```
-
-`mvn verify` também verifica a formatação Java com Eclipse JDT. Para formatar os fontes:
-
-```sh
-mvn spotless:apply
-```
-
-## Executar
-
-```sh
+```bash
+mvn clean test
 mvn package
-java -cp target/classes barbearia.BarbeariaSystem
+java -cp target/classes barbearia.cli.BarbeariaSystem
 ```
 
-## Estrutura
+## Business Rules
+
+- Client names cannot be null or blank
+- Descriptions cannot be null or blank
+- Monetary values cannot be negative
+- Haircut base price is `35.0`
+- Beard base price is `20.0` plus optional additional value
+- Total revenue is computed as the sum of all service prices
+
+## Project Structure
 
 ```text
+barbearia/
+├── cli/
+│   └── BarbeariaSystem.java
+├── domain/
+│   ├── Servico.java
+│   ├── CorteCabelo.java
+│   └── CorteBarba.java
+├── exception/
+│   ├── ClienteInvalidoException.java
+│   └── ServicoInvalidoException.java
+├── service/
+│   ├── GerenciadorBarbearia.java
+│   └── PersistenciaService.java
+└── ...
+
 src/
-	main/java/barbearia/
-		BarbeariaSystem.java       # Interface de terminal
-		GerenciadorBarbearia.java  # Registro e faturamento
-		Servico.java               # Contrato e validações compartilhadas
-		CorteCabelo.java           # Serviço de corte de cabelo
-		CorteBarba.java            # Serviço de corte de barba
-	test/java/barbearia/
-		GerenciadorBarbeariaTest.java
-		ServicoTest.java
+├── main/java/barbearia/...
+├── test/java/barbearia/domain/ServicoTest.java
+├── test/java/barbearia/service/GerenciadorBarbeariaTest.java
+└── dados.json
 ```
 
-## Decisões técnicas
+## Architecture Diagram
 
-- A interface de terminal é separada das regras de domínio; os registros ficam em memória e são descartados ao encerrar o programa.
-- `Servico` concentra validações compartilhadas; valores monetários precisam ser finitos e não negativos.
-- Os preços são calculados com `double` para manter o escopo simples do exercício. Para uso financeiro real, deve-se migrar para `BigDecimal` e definir regras de arredondamento.
-- JUnit Jupiter cobre os cálculos, rejeição de entradas inválidas e acesso somente para leitura à lista de serviços.
+```text
++-------------------+
+|  barbearia.cli    |
+|  BarbeariaSystem  |
+|  (user interface) |
++---------+---------+
+          |
+          v
++---------+---------+
+| barbearia.service |
+| GerenciadorBarbearia |
+| + persist data     |
+| + calculate total  |
++---------+---------+
+          |
+          v
++---------+---------+
+| barbearia.domain  |
+| Servico            |
+| CorteCabelo        |
+| CorteBarba         |
++---------+---------+
+          |
+          v
++-------------------+
+| barbearia.exception |
+| custom validations |
++-------------------+
+```
+
+## Example Terminal Output
+
+```text
+╔══════════════════════════════════════╗
+║   SISTEMA DE GESTÃO DE BARBEARIA     ║
+╚══════════════════════════════════════╝
+
+----------------------------------------
+  [1] Registrar Corte de Cabelo
+  [2] Registrar Corte de Barba
+  [3] Listar Serviços
+  [4] Ver Faturamento Total
+  [0] Sair
+----------------------------------------
+  Escolha uma opção: 1
+
+  Nome do cliente: Ana
+  Preço: R$ 35.00
+
+✔ Serviço registrado com sucesso!
+```
+
+## Running Tests
+
+```bash
+mvn test
+```
+
+This runs the unit tests for validation, persistence, and business rules.

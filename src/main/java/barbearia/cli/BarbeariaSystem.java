@@ -1,13 +1,19 @@
-package barbearia;
+package barbearia.cli;
 
-import java.util.Scanner;
+import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import java.util.Scanner;
+
+import barbearia.domain.CorteBarba;
+import barbearia.domain.CorteCabelo;
+import barbearia.service.GerenciadorBarbearia;
+import barbearia.service.PersistenciaService;
 
 public class BarbeariaSystem {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        GerenciadorBarbearia gerenciadorBarbearia = new GerenciadorBarbearia();
+        GerenciadorBarbearia gerenciadorBarbearia = new GerenciadorBarbearia(new PersistenciaService(), "dados.json");
         int opcaoMenu = -1;
 
         System.out.println("╔══════════════════════════════════════╗");
@@ -37,7 +43,7 @@ public class BarbeariaSystem {
                     case 4 :
                         System.out.println("\n========================================");
                         System.out.printf("  💰 Faturamento Total: R$ %.2f%n",
-                                gerenciadorBarbearia.calcularFaturamento());
+                                gerenciadorBarbearia.getFaturamentoTotal().doubleValue());
                         System.out.println("========================================");
                         break;
                     case 0 :
@@ -89,7 +95,7 @@ public class BarbeariaSystem {
             return;
         }
         CorteCabelo corte = new CorteCabelo(nomeCliente);
-        System.out.printf("  Preço: R$ %.2f%n", corte.calcularPreco());
+        System.out.printf("  Preço: R$ %.2f%n", corte.calcularPreco().doubleValue());
         gerenciador.registrarServico(corte);
         System.out.println("\n✔ Serviço registrado com sucesso!");
     }
@@ -101,19 +107,20 @@ public class BarbeariaSystem {
             System.out.println("  ⚠ Nome vazio!");
             return;
         }
-        double valorAdicional = 0;
+        BigDecimal valorAdicional = BigDecimal.ZERO;
         System.out.print("  Valor adicional da barba: R$ ");
         try {
-            double valorInformado = Double.parseDouble(scanner.nextLine().trim().replace(",", "."));
-            if (!Double.isFinite(valorInformado) || valorInformado < 0) {
-                throw new NumberFormatException("O valor adicional deve ser finito e não negativo.");
+            String valorInformado = scanner.nextLine().trim().replace(",", ".");
+            valorAdicional = BigDecimal.valueOf(Double.parseDouble(valorInformado));
+            if (valorAdicional.compareTo(BigDecimal.ZERO) < 0) {
+                throw new NumberFormatException("O valor adicional deve ser não negativo.");
             }
-            valorAdicional = valorInformado;
         } catch (NumberFormatException e) {
             System.out.println("  ⚠ Valor inválido! Usando R$ 0.00.");
+            valorAdicional = BigDecimal.ZERO;
         }
         CorteBarba corte = new CorteBarba(nomeCliente, valorAdicional);
-        System.out.printf("  Preço: R$ %.2f%n", corte.calcularPreco());
+        System.out.printf("  Preço: R$ %.2f%n", corte.calcularPreco().doubleValue());
         gerenciador.registrarServico(corte);
         System.out.println("\n✔ Serviço registrado com sucesso!");
     }
